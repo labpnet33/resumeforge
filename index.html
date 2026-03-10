@@ -1,243 +1,484 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ResumeForge — Build Your Career Story</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>ResumeForge — Professional Resume Builder</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:wght@400;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
 
-  <!-- HEADER -->
-  <header class="site-header">
-    <div class="header-inner">
-      <div class="logo">
-        <span class="logo-icon">⬡</span>
-        <span class="logo-text">Resume<strong>Forge</strong></span>
-      </div>
-      <nav class="header-nav">
-        <a href="#builder">Build</a>
-        <a href="#tips">Tips</a>
-        <button class="btn-download-header" onclick="downloadPDF()">↓ Download PDF</button>
-      </nav>
+<!-- TOP NAV -->
+<nav class="topnav">
+  <div class="topnav-left">
+    <div class="logo">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+        <rect width="28" height="28" rx="6" fill="#2563eb"/>
+        <rect x="6" y="7" width="16" height="2.5" rx="1.25" fill="white"/>
+        <rect x="6" y="12" width="12" height="2.5" rx="1.25" fill="white"/>
+        <rect x="6" y="17" width="9" height="2.5" rx="1.25" fill="white"/>
+      </svg>
+      <span class="logo-text">ResumeForge</span>
     </div>
-  </header>
+  </div>
+  <div class="topnav-right">
+    <button class="btn-nav-template" onclick="toggleTemplatePanel()">
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="9" y="1" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="1" y="9" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="9" y="9" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5"/></svg>
+      Templates
+    </button>
+    <button class="btn-nav-download" onclick="downloadPDF()">
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M8 2v8M5 7l3 3 3-3M2 12v1a1 1 0 001 1h10a1 1 0 001-1v-1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Download PDF
+    </button>
+  </div>
+</nav>
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-bg-grid"></div>
-    <div class="hero-content">
-      <div class="hero-badge">✦ Free · No Sign-up · Instant PDF</div>
-      <h1 class="hero-title">Craft a Resume<br/><em>That Gets Noticed</em></h1>
-      <p class="hero-sub">Fill in your details. Watch your resume come alive. Download in seconds.</p>
-      <a href="#builder" class="btn-start">Start Building →</a>
+<!-- TEMPLATE PANEL -->
+<div class="template-overlay" id="templateOverlay" onclick="toggleTemplatePanel()"></div>
+<div class="template-panel" id="templatePanel">
+  <div class="tp-header">
+    <h3>Choose a Template</h3>
+    <button class="tp-close" onclick="toggleTemplatePanel()">✕</button>
+  </div>
+  <div class="tp-grid">
+    <div class="tp-card active" id="tcard-classic" onclick="setTemplate('classic',this)">
+      <div class="tp-thumb tp-thumb-classic"></div>
+      <span>Classic</span>
     </div>
-    <div class="hero-preview-float">
-      <div class="float-card fc1">✓ Real-time Preview</div>
-      <div class="float-card fc2">✓ PDF Download</div>
-      <div class="float-card fc3">✓ Professional Layout</div>
+    <div class="tp-card" id="tcard-modern" onclick="setTemplate('modern',this)">
+      <div class="tp-thumb tp-thumb-modern"></div>
+      <span>Modern</span>
     </div>
-  </section>
+    <div class="tp-card" id="tcard-executive" onclick="setTemplate('executive',this)">
+      <div class="tp-thumb tp-thumb-executive"></div>
+      <span>Executive</span>
+    </div>
+    <div class="tp-card" id="tcard-minimal" onclick="setTemplate('minimal',this)">
+      <div class="tp-thumb tp-thumb-minimal"></div>
+      <span>Minimal</span>
+    </div>
+  </div>
+  <div class="tp-colors">
+    <p>Accent Color</p>
+    <div class="color-swatches">
+      <div class="swatch active" style="background:#2563eb" onclick="setAccent('#2563eb',this)"></div>
+      <div class="swatch" style="background:#16a34a" onclick="setAccent('#16a34a',this)"></div>
+      <div class="swatch" style="background:#9333ea" onclick="setAccent('#9333ea',this)"></div>
+      <div class="swatch" style="background:#dc2626" onclick="setAccent('#dc2626',this)"></div>
+      <div class="swatch" style="background:#0891b2" onclick="setAccent('#0891b2',this)"></div>
+      <div class="swatch" style="background:#1a1a2e" onclick="setAccent('#1a1a2e',this)"></div>
+    </div>
+  </div>
+</div>
 
-  <!-- MAIN BUILDER -->
-  <section class="builder-section" id="builder">
-    <div class="builder-container">
+<!-- MAIN LAYOUT -->
+<div class="app-layout">
 
-      <!-- LEFT: FORM PANEL -->
-      <div class="form-panel">
-        <div class="form-panel-header">
-          <h2>Your Details</h2>
-          <p>Fill in the fields below — your resume updates live.</p>
+  <!-- SECTION SIDEBAR -->
+  <aside class="section-sidebar">
+    <div class="ss-label">Sections</div>
+    <nav class="ss-nav">
+      <a class="ss-item" onclick="scrollTo('sec-personal')" href="#sec-personal">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M2 14c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Personal Info
+      </a>
+      <a class="ss-item" onclick="scrollTo('sec-contact')" href="#sec-contact">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="1" y="3" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M1 6l7 4 7-4" stroke="currentColor" stroke-width="1.5"/></svg>
+        Contact
+      </a>
+      <a class="ss-item" onclick="scrollTo('sec-summary')" href="#sec-summary">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M5 6h6M5 9h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Summary
+      </a>
+      <a class="ss-item" onclick="scrollTo('sec-exp')" href="#sec-exp">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="2" y="5" width="12" height="9" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M5 5V4a1 1 0 011-1h4a1 1 0 011 1v1" stroke="currentColor" stroke-width="1.5"/></svg>
+        Experience
+      </a>
+      <a class="ss-item" onclick="scrollTo('sec-edu')" href="#sec-edu">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M8 2L2 6l6 4 6-4-6-4z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M4 8v4c0 1.1 1.79 2 4 2s4-.9 4-2V8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Education
+      </a>
+      <a class="ss-item" onclick="scrollTo('sec-skills')" href="#sec-skills">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 8h2l2-5 2 10 2-5h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Skills
+      </a>
+      <a class="ss-item" onclick="scrollTo('sec-lang')" href="#sec-lang">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M8 2a9.6 9.6 0 010 12M8 2a9.6 9.6 0 000 12M2 8h12" stroke="currentColor" stroke-width="1.5"/></svg>
+        Languages
+      </a>
+      <a class="ss-item" onclick="scrollTo('sec-cert')" href="#sec-cert">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="7" r="4" stroke="currentColor" stroke-width="1.5"/><path d="M6 11l-1.5 3 3.5-1.5 3.5 1.5L10 11" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+        Certifications
+      </a>
+    </nav>
+  </aside>
+
+  <!-- CENTER EDITOR -->
+  <main class="editor-main">
+
+    <!-- PERSONAL INFO -->
+    <div class="form-section" id="sec-personal">
+      <div class="fs-header">
+        <div class="fs-icon-wrap">
+          <svg width="18" height="18" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M2 14c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
         </div>
-
-        <!-- PERSONAL INFO -->
-        <div class="form-group-card">
-          <div class="form-group-title">
-            <span class="form-group-icon">👤</span> Personal Info
-          </div>
-          <div class="form-row">
-            <div class="form-field">
-              <label for="fullName">Full Name *</label>
-              <input type="text" id="fullName" placeholder="e.g. Alexandra Chen" oninput="updatePreview()" />
-            </div>
-            <div class="form-field">
-              <label for="jobTitle">Job Title / Role</label>
-              <input type="text" id="jobTitle" placeholder="e.g. Frontend Developer" oninput="updatePreview()" />
-            </div>
-          </div>
-          <div class="form-field">
-            <label for="summary">Professional Summary</label>
-            <textarea id="summary" rows="3" placeholder="A brief 2–3 sentence overview of your background, key skills, and career goals..." oninput="updatePreview()"></textarea>
-          </div>
-        </div>
-
-        <!-- CONTACT INFO -->
-        <div class="form-group-card">
-          <div class="form-group-title">
-            <span class="form-group-icon">📬</span> Contact Information
-          </div>
-          <div class="form-row">
-            <div class="form-field">
-              <label for="email">Email *</label>
-              <input type="email" id="email" placeholder="you@example.com" oninput="updatePreview()" />
-            </div>
-            <div class="form-field">
-              <label for="phone">Phone</label>
-              <input type="tel" id="phone" placeholder="+1 (555) 000-0000" oninput="updatePreview()" />
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-field">
-              <label for="location">Location</label>
-              <input type="text" id="location" placeholder="City, State / Remote" oninput="updatePreview()" />
-            </div>
-            <div class="form-field">
-              <label for="linkedin">LinkedIn / Portfolio</label>
-              <input type="text" id="linkedin" placeholder="linkedin.com/in/yourname" oninput="updatePreview()" />
-            </div>
-          </div>
-        </div>
-
-        <!-- SKILLS -->
-        <div class="form-group-card">
-          <div class="form-group-title">
-            <span class="form-group-icon">⚡</span> Skills
-          </div>
-          <div class="form-field">
-            <label for="skills">Skills <span class="label-hint">(separate with commas)</span></label>
-            <input type="text" id="skills" placeholder="JavaScript, React, Python, Figma, Communication..." oninput="updatePreview()" />
-          </div>
-        </div>
-
-        <!-- WORK EXPERIENCE -->
-        <div class="form-group-card">
-          <div class="form-group-title">
-            <span class="form-group-icon">💼</span> Work Experience
-            <button class="btn-add" onclick="addExperience()">+ Add</button>
-          </div>
-          <div id="experienceList">
-            <!-- Dynamic entries here -->
-          </div>
-        </div>
-
-        <!-- EDUCATION -->
-        <div class="form-group-card">
-          <div class="form-group-title">
-            <span class="form-group-icon">🎓</span> Education
-            <button class="btn-add" onclick="addEducation()">+ Add</button>
-          </div>
-          <div id="educationList">
-            <!-- Dynamic entries here -->
-          </div>
-        </div>
-
-        <!-- ACTIONS -->
-        <div class="form-actions">
-          <button class="btn-clear" onclick="clearAll()">Clear All</button>
-          <button class="btn-download" onclick="downloadPDF()">
-            <span>↓ Download PDF</span>
-          </button>
+        <div class="fs-titles">
+          <h2>Personal Info</h2>
+          <p>Start with your basic details</p>
         </div>
       </div>
-
-      <!-- RIGHT: PREVIEW PANEL -->
-      <div class="preview-panel">
-        <div class="preview-toolbar">
-          <span class="preview-label">Live Preview</span>
-          <button class="btn-download-sm" onclick="downloadPDF()">↓ PDF</button>
+      <div class="fs-body">
+        <div class="field-row">
+          <div class="field-group">
+            <label>First Name <span class="req">*</span></label>
+            <input type="text" id="firstName" placeholder="Alexandra" oninput="updatePreview()"/>
+          </div>
+          <div class="field-group">
+            <label>Last Name <span class="req">*</span></label>
+            <input type="text" id="lastName" placeholder="Chen" oninput="updatePreview()"/>
+          </div>
         </div>
-        <div class="preview-wrapper">
-          <div class="resume-preview" id="resumePreview">
+        <div class="field-row">
+          <div class="field-group">
+            <label>Job Title / Desired Role</label>
+            <input type="text" id="jobTitle" placeholder="Senior Frontend Developer" oninput="updatePreview()"/>
+          </div>
+          <div class="field-group">
+            <label>Photo URL <span class="optional">(optional)</span></label>
+            <input type="text" id="photoUrl" placeholder="https://i.imgur.com/..." oninput="updatePreview()"/>
+          </div>
+        </div>
+      </div>
+    </div>
 
-            <!-- RESUME HEADER -->
-            <div class="rp-header">
-              <div class="rp-name-block">
-                <h1 id="rp-name" class="rp-name">Your Name</h1>
-                <p id="rp-title" class="rp-job-title">Job Title</p>
+    <!-- CONTACT -->
+    <div class="form-section" id="sec-contact">
+      <div class="fs-header">
+        <div class="fs-icon-wrap">
+          <svg width="18" height="18" viewBox="0 0 16 16" fill="none"><rect x="1" y="3" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M1 6l7 4 7-4" stroke="currentColor" stroke-width="1.5"/></svg>
+        </div>
+        <div class="fs-titles">
+          <h2>Contact Details</h2>
+          <p>How employers can reach you</p>
+        </div>
+      </div>
+      <div class="fs-body">
+        <div class="field-row">
+          <div class="field-group">
+            <label>Email Address <span class="req">*</span></label>
+            <input type="email" id="email" placeholder="alexandra@email.com" oninput="updatePreview()"/>
+          </div>
+          <div class="field-group">
+            <label>Phone Number</label>
+            <input type="tel" id="phone" placeholder="+1 (555) 000-0000" oninput="updatePreview()"/>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label>City / Location</label>
+            <input type="text" id="location" placeholder="San Francisco, CA" oninput="updatePreview()"/>
+          </div>
+          <div class="field-group">
+            <label>Country</label>
+            <input type="text" id="country" placeholder="United States" oninput="updatePreview()"/>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label>LinkedIn Profile</label>
+            <input type="text" id="linkedin" placeholder="linkedin.com/in/your-name" oninput="updatePreview()"/>
+          </div>
+          <div class="field-group">
+            <label>Portfolio / Website</label>
+            <input type="text" id="website" placeholder="yourportfolio.com" oninput="updatePreview()"/>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUMMARY -->
+    <div class="form-section" id="sec-summary">
+      <div class="fs-header">
+        <div class="fs-icon-wrap">
+          <svg width="18" height="18" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M5 6h6M5 9h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <div class="fs-titles">
+          <h2>Professional Summary</h2>
+          <p>A 2–3 sentence elevator pitch</p>
+        </div>
+      </div>
+      <div class="fs-body">
+        <div class="field-group">
+          <label>Summary</label>
+          <textarea id="summary" rows="5" placeholder="Results-driven Frontend Developer with 5+ years of experience building scalable web applications. Proficient in React, TypeScript, and Node.js. Passionate about crafting exceptional user experiences." oninput="updatePreview(); charCount(this,'summaryCount')"></textarea>
+          <div class="field-hint"><span id="summaryCount">0</span> chars · Recommended 200–400</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WORK EXPERIENCE -->
+    <div class="form-section" id="sec-exp">
+      <div class="fs-header">
+        <div class="fs-icon-wrap">
+          <svg width="18" height="18" viewBox="0 0 16 16" fill="none"><rect x="2" y="5" width="12" height="9" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M5 5V4a1 1 0 011-1h4a1 1 0 011 1v1" stroke="currentColor" stroke-width="1.5"/></svg>
+        </div>
+        <div class="fs-titles">
+          <h2>Work Experience</h2>
+          <p>Most recent first</p>
+        </div>
+        <button class="btn-add-entry" onclick="addExperience()">+ Add Position</button>
+      </div>
+      <div class="fs-body" id="expList"></div>
+    </div>
+
+    <!-- EDUCATION -->
+    <div class="form-section" id="sec-edu">
+      <div class="fs-header">
+        <div class="fs-icon-wrap">
+          <svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M8 2L2 6l6 4 6-4-6-4z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M4 8v4c0 1.1 1.79 2 4 2s4-.9 4-2V8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <div class="fs-titles">
+          <h2>Education</h2>
+          <p>Your academic background</p>
+        </div>
+        <button class="btn-add-entry" onclick="addEducation()">+ Add Education</button>
+      </div>
+      <div class="fs-body" id="eduList"></div>
+    </div>
+
+    <!-- SKILLS -->
+    <div class="form-section" id="sec-skills">
+      <div class="fs-header">
+        <div class="fs-icon-wrap">
+          <svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M3 8h2l2-5 2 10 2-5h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="fs-titles">
+          <h2>Skills</h2>
+          <p>Technical and soft skills</p>
+        </div>
+      </div>
+      <div class="fs-body">
+        <div class="skills-input-row">
+          <input type="text" id="skillInput" placeholder="Type a skill and press Enter…" onkeydown="skillKeydown(event)"/>
+          <button class="btn-skill-add" onclick="addSkill()">Add</button>
+        </div>
+        <div class="skills-chips" id="skillChips"></div>
+      </div>
+    </div>
+
+    <!-- LANGUAGES -->
+    <div class="form-section" id="sec-lang">
+      <div class="fs-header">
+        <div class="fs-icon-wrap">
+          <svg width="18" height="18" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M8 2a9.6 9.6 0 010 12M8 2a9.6 9.6 0 000 12M2 8h12" stroke="currentColor" stroke-width="1.5"/></svg>
+        </div>
+        <div class="fs-titles">
+          <h2>Languages</h2>
+          <p>Languages you speak or write</p>
+        </div>
+        <button class="btn-add-entry" onclick="addLanguage()">+ Add Language</button>
+      </div>
+      <div class="fs-body" id="langList"></div>
+    </div>
+
+    <!-- CERTIFICATIONS -->
+    <div class="form-section" id="sec-cert">
+      <div class="fs-header">
+        <div class="fs-icon-wrap">
+          <svg width="18" height="18" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="7" r="4" stroke="currentColor" stroke-width="1.5"/><path d="M6 11l-1.5 3 3.5-1.5 3.5 1.5L10 11" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="fs-titles">
+          <h2>Certifications</h2>
+          <p>Awards, courses, credentials</p>
+        </div>
+        <button class="btn-add-entry" onclick="addCert()">+ Add Certification</button>
+      </div>
+      <div class="fs-body" id="certList"></div>
+    </div>
+
+    <div class="editor-bottom-bar">
+      <button class="btn-clear-all" onclick="clearAll()">🗑 Clear All</button>
+      <button class="btn-download-main" onclick="downloadPDF()">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v8M5 7l3 3 3-3M2 12v1a1 1 0 001 1h10a1 1 0 001-1v-1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Download PDF
+      </button>
+    </div>
+  </main>
+
+  <!-- PREVIEW -->
+  <aside class="preview-aside">
+    <div class="preview-topbar">
+      <span class="preview-live-dot"></span>
+      <span>Live Preview</span>
+      <div class="zoom-controls">
+        <button onclick="changeZoom(-0.1)">−</button>
+        <span id="zoomLabel">85%</span>
+        <button onclick="changeZoom(0.1)">+</button>
+      </div>
+    </div>
+    <div class="preview-scroll">
+      <div class="preview-page-outer">
+        <div class="resume-doc" id="resumeDoc">
+
+          <!-- CLASSIC -->
+          <div id="tpl-classic" class="tpl-root tpl-visible">
+            <div class="cl-header">
+              <div class="cl-photo-wrap" id="cl-photo-wrap" style="display:none"><img id="cl-photo" src="" alt=""/></div>
+              <div class="cl-name-block">
+                <h1 id="cl-name">Your Name</h1>
+                <div id="cl-jobtitle" class="cl-jobtitle"></div>
               </div>
-              <div class="rp-contact-block" id="rp-contact">
-                <span class="rp-contact-item" id="rp-email-disp"></span>
-                <span class="rp-contact-item" id="rp-phone-disp"></span>
-                <span class="rp-contact-item" id="rp-location-disp"></span>
-                <span class="rp-contact-item" id="rp-linkedin-disp"></span>
+              <div class="cl-contact" id="cl-contact"></div>
+            </div>
+            <div id="cl-summary-wrap" style="display:none" class="cl-section">
+              <div class="cl-sec-title">Profile</div>
+              <p id="cl-summary"></p>
+            </div>
+            <div id="cl-exp-wrap" style="display:none" class="cl-section">
+              <div class="cl-sec-title">Experience</div>
+              <div id="cl-exp-list"></div>
+            </div>
+            <div id="cl-edu-wrap" style="display:none" class="cl-section">
+              <div class="cl-sec-title">Education</div>
+              <div id="cl-edu-list"></div>
+            </div>
+            <div id="cl-skills-wrap" style="display:none" class="cl-section">
+              <div class="cl-sec-title">Skills</div>
+              <div id="cl-skills-list" class="cl-skills-grid"></div>
+            </div>
+            <div id="cl-lang-wrap" style="display:none" class="cl-section">
+              <div class="cl-sec-title">Languages</div>
+              <div id="cl-lang-list" class="cl-lang-list"></div>
+            </div>
+            <div id="cl-cert-wrap" style="display:none" class="cl-section">
+              <div class="cl-sec-title">Certifications</div>
+              <div id="cl-cert-list"></div>
+            </div>
+          </div>
+
+          <!-- MODERN -->
+          <div id="tpl-modern" class="tpl-root" style="display:none">
+            <div class="mo-layout">
+              <div class="mo-sidebar">
+                <div class="mo-photo-wrap" id="mo-photo-wrap" style="display:none"><img id="mo-photo" src="" alt=""/></div>
+                <h1 id="mo-name">Your Name</h1>
+                <div id="mo-jobtitle" class="mo-jobtitle"></div>
+                <div id="mo-contact" class="mo-contact-list"></div>
+                <div id="mo-skills-wrap" style="display:none">
+                  <div class="mo-sec-label">Skills</div>
+                  <div id="mo-skills-list" class="mo-skills-list"></div>
+                </div>
+                <div id="mo-lang-wrap" style="display:none">
+                  <div class="mo-sec-label">Languages</div>
+                  <div id="mo-lang-list"></div>
+                </div>
+              </div>
+              <div class="mo-main">
+                <div id="mo-summary-wrap" style="display:none">
+                  <div class="mo-main-title">Profile</div>
+                  <p id="mo-summary"></p>
+                </div>
+                <div id="mo-exp-wrap" style="display:none">
+                  <div class="mo-main-title">Experience</div>
+                  <div id="mo-exp-list"></div>
+                </div>
+                <div id="mo-edu-wrap" style="display:none">
+                  <div class="mo-main-title">Education</div>
+                  <div id="mo-edu-list"></div>
+                </div>
+                <div id="mo-cert-wrap" style="display:none">
+                  <div class="mo-main-title">Certifications</div>
+                  <div id="mo-cert-list"></div>
+                </div>
               </div>
             </div>
-
-            <!-- SUMMARY -->
-            <div class="rp-section" id="rp-summary-section">
-              <div class="rp-section-label">Profile</div>
-              <p class="rp-summary-text" id="rp-summary-text"></p>
-            </div>
-
-            <!-- SKILLS -->
-            <div class="rp-section" id="rp-skills-section">
-              <div class="rp-section-label">Skills</div>
-              <div class="rp-skills-wrap" id="rp-skills-wrap"></div>
-            </div>
-
-            <!-- EXPERIENCE -->
-            <div class="rp-section" id="rp-exp-section">
-              <div class="rp-section-label">Experience</div>
-              <div id="rp-exp-list"></div>
-            </div>
-
-            <!-- EDUCATION -->
-            <div class="rp-section" id="rp-edu-section">
-              <div class="rp-section-label">Education</div>
-              <div id="rp-edu-list"></div>
-            </div>
-
           </div>
+
+          <!-- EXECUTIVE -->
+          <div id="tpl-executive" class="tpl-root" style="display:none">
+            <div class="ex-banner">
+              <div class="ex-name-block">
+                <h1 id="ex-name">Your Name</h1>
+                <div id="ex-jobtitle" class="ex-jobtitle"></div>
+              </div>
+              <div id="ex-contact" class="ex-contact"></div>
+            </div>
+            <div id="ex-summary-wrap" style="display:none" class="ex-section">
+              <div class="ex-sec-title">Executive Summary</div>
+              <p id="ex-summary"></p>
+            </div>
+            <div id="ex-exp-wrap" style="display:none" class="ex-section">
+              <div class="ex-sec-title">Professional Experience</div>
+              <div id="ex-exp-list"></div>
+            </div>
+            <div id="ex-edu-wrap" style="display:none" class="ex-section">
+              <div class="ex-sec-title">Education</div>
+              <div id="ex-edu-list"></div>
+            </div>
+            <div id="ex-skills-wrap" style="display:none" class="ex-section">
+              <div class="ex-sec-title">Core Competencies</div>
+              <div id="ex-skills-list" class="ex-skills-grid"></div>
+            </div>
+            <div id="ex-cert-wrap" style="display:none" class="ex-section">
+              <div class="ex-sec-title">Certifications</div>
+              <div id="ex-cert-list"></div>
+            </div>
+          </div>
+
+          <!-- MINIMAL -->
+          <div id="tpl-minimal" class="tpl-root" style="display:none">
+            <div class="mn-header">
+              <h1 id="mn-name">Your Name</h1>
+              <div id="mn-jobtitle" class="mn-jobtitle"></div>
+              <div id="mn-contact" class="mn-contact-row"></div>
+            </div>
+            <div id="mn-summary-wrap" style="display:none" class="mn-section">
+              <div class="mn-sec-title">About</div>
+              <p id="mn-summary"></p>
+            </div>
+            <div id="mn-exp-wrap" style="display:none" class="mn-section">
+              <div class="mn-sec-title">Experience</div>
+              <div id="mn-exp-list"></div>
+            </div>
+            <div id="mn-edu-wrap" style="display:none" class="mn-section">
+              <div class="mn-sec-title">Education</div>
+              <div id="mn-edu-list"></div>
+            </div>
+            <div id="mn-skills-wrap" style="display:none" class="mn-section">
+              <div class="mn-sec-title">Skills</div>
+              <div id="mn-skills-list" class="mn-skills-list"></div>
+            </div>
+            <div id="mn-cert-wrap" style="display:none" class="mn-section">
+              <div class="mn-sec-title">Certifications</div>
+              <div id="mn-cert-list"></div>
+            </div>
+          </div>
+
         </div>
       </div>
-
     </div>
-  </section>
-
-  <!-- TIPS SECTION -->
-  <section class="tips-section" id="tips">
-    <div class="tips-inner">
-      <h2 class="tips-title">Resume Tips That Work</h2>
-      <div class="tips-grid">
-        <div class="tip-card">
-          <div class="tip-num">01</div>
-          <h3>Lead with Impact</h3>
-          <p>Use your summary to immediately communicate your value. Mention your years of experience, key specialty, and biggest achievement in 2–3 sentences.</p>
-        </div>
-        <div class="tip-card">
-          <div class="tip-num">02</div>
-          <h3>Quantify Achievements</h3>
-          <p>Replace vague duties with measurable results. "Increased sales by 30%" is more powerful than "Responsible for sales."</p>
-        </div>
-        <div class="tip-card">
-          <div class="tip-num">03</div>
-          <h3>Tailor for Each Role</h3>
-          <p>Mirror the keywords from the job description in your resume. ATS systems scan for exact matches before a human ever reads your file.</p>
-        </div>
-        <div class="tip-card">
-          <div class="tip-num">04</div>
-          <h3>Keep It Clean</h3>
-          <p>Stick to one page for under 10 years experience. Use consistent formatting, clear section headers, and plenty of white space.</p>
-        </div>
-      </div>
+    <div class="preview-footer">
+      <button class="btn-dl-footer" onclick="downloadPDF()">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 2v8M5 7l3 3 3-3M2 12v1a1 1 0 001 1h10a1 1 0 001-1v-1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Download PDF
+      </button>
     </div>
-  </section>
+  </aside>
+</div>
 
-  <!-- FOOTER -->
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <div class="logo">
-        <span class="logo-icon">⬡</span>
-        <span class="logo-text">Resume<strong>Forge</strong></span>
-      </div>
-      <p class="footer-note">Free to use. No data stored. Your privacy is respected.</p>
-    </div>
-  </footer>
+<!-- PDF LOADING -->
+<div class="pdf-overlay" id="pdfOverlay">
+  <div class="pdf-box">
+    <div class="pdf-spinner"></div>
+    <p>Generating PDF…</p>
+    <small>This may take a few seconds</small>
+  </div>
+</div>
 
-  <script src="app.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
